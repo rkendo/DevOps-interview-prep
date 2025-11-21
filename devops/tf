@@ -1,0 +1,18 @@
+🚨 𝐖𝐡𝐚𝐭 𝐇𝐚𝐩𝐩𝐞𝐧𝐬 𝐈𝐟 𝐭𝐡𝐞 𝐓𝐞𝐫𝐫𝐚𝐟𝐨𝐫𝐦 𝐒𝐭𝐚𝐭𝐞 𝐅𝐢𝐥𝐞 𝐈𝐬 𝐃𝐞𝐥𝐞𝐭𝐞𝐝?
+We can understand the Terraform state file like the memory of our infrastructure. When this file is deleted, Terraform forgets everything it created.
+👉 𝐖𝐡𝐚𝐭 𝐞𝐱𝐚𝐜𝐭𝐥𝐲 𝐡𝐚𝐩𝐩𝐞𝐧𝐬?
+Terraform loses the complete mapping of resources.
+Terraform thinks all resources are new.
+Terraform may try to recreate existing infrastructure, leading to conflicts, errors, or downtime.
+
+👉 𝐖𝐡𝐲 𝐢𝐬 𝐭𝐡𝐢𝐬 𝐝𝐚𝐧𝐠𝐞𝐫𝐨𝐮𝐬?
+We cannot safely run plan or apply.
+We cannot update or destroy resources correctly.
+We may accidentally break production by creating duplicate resources.
+
+👉 𝐇𝐨𝐰 𝐜𝐚𝐧 𝐰𝐞 𝐚𝐯𝐨𝐢𝐝 𝐭𝐡𝐢𝐬?
+Always store state in remote backend like S3 + DynamoDB, Azure Storage + Locks, GCS, etc.
+Enable state locking.
+Take regular backups of the state file.
+
+💡 𝐒𝐡𝐨𝐫𝐭 𝐚𝐧𝐬𝐰𝐞𝐫: If the state file is deleted, Terraform loses track of your infrastructure and may try to recreate everything.
