@@ -16,3 +16,49 @@ Enable state locking.
 Take regular backups of the state file.
 
 💡 𝐒𝐡𝐨𝐫𝐭 𝐚𝐧𝐬𝐰𝐞𝐫: If the state file is deleted, Terraform loses track of your infrastructure and may try to recreate everything.
+
+#########################################################################################################################################
+📌 𝐖𝐡𝐚𝐭 𝐚𝐫𝐞 𝐝𝐢𝐟𝐟𝐞𝐫𝐞𝐧𝐭 𝐭𝐲𝐩𝐞𝐬 𝐨𝐟 𝐯𝐚𝐫𝐢𝐚𝐛𝐥𝐞 𝐢𝐧 𝐓𝐞𝐫𝐫𝐚𝐟𝐨𝐫𝐦 𝐟𝐢𝐥𝐞?
+We can use variables in Terraform to make our code simple, reusable, and easy to manage. Terraform mainly supports three types of variables:
+
+🔹 𝐈𝐧𝐩𝐮𝐭 𝐕𝐚𝐫𝐢𝐚𝐛𝐥𝐞𝐬
+ We use input variables to pass values from outside when we run terraform plan or terraform apply. These values can come from .tfvars files, CLI arguments, or environment variables.
+
+🔹 𝐋𝐨𝐜𝐚𝐥 𝐕𝐚𝐫𝐢𝐚𝐛𝐥𝐞𝐬
+ We use local variables for internal calculations or static values. They work only inside the module or folder where the Terraform command runs. They help us avoid repeating values and keep the code clean.
+
+🔹 𝐎𝐮𝐭𝐩𝐮𝐭 𝐕𝐚𝐫𝐢𝐚𝐛𝐥𝐞𝐬
+ We use output variables to show important values after Terraform finishes. Other modules and pipelines can read these outputs. This helps us share required information from the state.
+
+💡 We can use these three variable types to build clean, scalable, and production-ready Terraform modules.
+############################################################################################################################################
+
+ 𝐃𝐢𝐟𝐟𝐞𝐫𝐞𝐧𝐭 𝐖𝐚𝐲𝐬 𝐖𝐞 𝐂𝐚𝐧 𝐏𝐚𝐬𝐬 𝐕𝐚𝐫𝐢𝐚𝐛𝐥𝐞𝐬 𝐢𝐧 𝐓𝐞𝐫𝐫𝐚𝐟𝐨𝐫𝐦
+When we work with Terraform, we can pass variable values in multiple ways depending on our workflow, environment, and automation needs. These are the most common and practical methods:
+🔹 1.𝐖𝐞 𝐜𝐚𝐧 𝐮𝐬𝐞 𝐚 .𝐭𝐟𝐯𝐚𝐫𝐬 𝐟𝐢𝐥𝐞
+ This is the cleanest way when we have many variables.
+ Example:
+terraform plan -var-file="dev.tfvars"
+
+🔹 2. 𝐖𝐞 𝐜𝐚𝐧 𝐩𝐚𝐬𝐬 𝐢𝐧𝐝𝐢𝐯𝐢𝐝𝐮𝐚𝐥 𝐯𝐚𝐫𝐢𝐚𝐛𝐥𝐞𝐬 𝐟𝐫𝐨𝐦 𝐭𝐡𝐞 𝐂𝐋𝐈 
+Useful for quick tests or one-time values.
+
+
+ Example:
+terraform plan -var="env=dev" -var="region=eastus"
+
+🔹 3. 𝐖𝐞 𝐜𝐚𝐧 𝐞𝐧𝐭𝐞𝐫 𝐯𝐚𝐥𝐮𝐞𝐬 𝐝𝐮𝐫𝐢𝐧𝐠 𝐫𝐮𝐧𝐭𝐢𝐦𝐞
+
+ If variables are not provided, Terraform will interactively ask for them.
+ This is good for manual execution but not recommended for automation.
+
+We can choose any method based on the use case — but for real projects, .𝐭𝐟𝐯𝐚𝐫𝐬 𝐚𝐧𝐝 𝐚𝐮𝐭𝐨𝐦𝐚𝐭𝐢𝐨𝐧 𝐯𝐢𝐚 𝐂𝐈/𝐂𝐃 𝐩𝐢𝐩𝐞𝐥𝐢𝐧𝐞𝐬 are the most reliable and scalable options.
+
+##############################################################################################################################
+
+You removed an EC2 instance block from your .tf file but did not run terraform destroy. You now run terraform apply. What will Terraform do?
+
+If you remove an EC2 instance block from your Terraform (.tf) file but do not run terraform destroy, and then execute terraform apply, Terraform will plan to destroy the EC2 instance. 
+This happens because Terraform's state file still contains the resource, but your configuration (.tf files) no longer defines it. 
+During terraform apply, Terraform recognizes that the resource is "managed" but now missing from your desired state, 
+so it schedules it for deletion from your AWS account and removes it from the state file as well
