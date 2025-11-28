@@ -1,0 +1,6 @@
+• 𝐑𝐨𝐥𝐥𝐢𝐧𝐠 𝐔𝐩𝐝𝐚𝐭𝐞𝐬: Default in Kubernetes, ideal for routine, non-breaking changes. Pods are updated gradually, so some instances of the old version always stay available while the new version rolls out, minimizing user impact.​
+
+ • 𝐁𝐥𝐮𝐞-𝐆𝐫𝐞𝐞𝐧: Run two identical environments (blue = current, green = new), then switch traffic once the new version is fully validated. This approach is great when you need fast rollback and near-zero downtime for critical releases.​
+
+ • 𝐂𝐚𝐧𝐚𝐫𝐲: Release the new version to a small percentage of users (e.g., 5% → 20% → 50% → 100%) and increase traffic gradually. This is powerful for high-traffic systems where you want to test real-world behavior with low blast radius.​
+In real projects, I combine these strategies with monitoring, alerts, and GitOps workflows so that every deployment is both observable and reversible. 
