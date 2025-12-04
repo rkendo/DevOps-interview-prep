@@ -48,3 +48,37 @@
 ‎
 ‎26. What is the difference between 404 and 403 errors?
 ‎27. What is the difference between 504 and 505 errors?
+
+
+
+
+
+🔹 AWS Cloud
+1️⃣ How do you implement multi-AZ high availability for EC2 across regions?
+2️⃣ What strategies optimize S3 costs for large-scale storage?
+3️⃣ How do you set up ECS or EKS for container orchestration?
+4️⃣ Explain Lambda cold starts and mitigation techniques?
+5️⃣ How does AWS CodePipeline integrate with CodeBuild and CodeDeploy?
+6️⃣ What is AWS CloudFormation Drift Detection?
+7️⃣ How do you configure IAM roles for cross-account access?
+8️⃣ What are AWS Backup policies for cross-service protection?
+9️⃣ How do you use AWS X-Ray for microservices tracing?
+🔟 Explain FinOps practices for cost governance in AWS?
+1️⃣1️⃣ How do you enable VPC Flow Logs for security auditing?
+1️⃣2️⃣ What is the role of AWS Systems Manager in automation?
+🔹 DevOps
+1️⃣ How do you implement GitOps with ArgoCD?
+2️⃣ What is blue-green deployment in CI/CD?
+3️⃣ Explain Helm charts for Kubernetes packaging?
+4️⃣ How do you handle long-running Jenkins agents?
+5️⃣ What metrics define a healthy Prometheus setup?
+6️⃣ How does Ansible Tower manage playbooks at scale?
+7️⃣ Explain chaos engineering in production?
+8️⃣ What is policy-as-code with OPA?
+9️⃣ How do you migrate monolith to microservices?
+🔟 Describe zero-trust security in pipelines?
+1️⃣1️⃣ What are Kubernetes operators and CRDs?
+1️⃣2️⃣ How do you implement service mesh with Istio?
+1️⃣3️⃣ Explain observability with OpenTelemetry?
+1️⃣4️⃣ What is progressive delivery with Flagger?
+1️⃣5️⃣ How do you automate compliance scans in Terraform?
