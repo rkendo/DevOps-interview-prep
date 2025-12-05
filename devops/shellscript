@@ -3,14 +3,93 @@ How do you monitor disk usage and send an alert if it exceeds 80%?
 Write a Bash script to check the health of a Kubernetes Pod and Node.
 What does $?, S#, S@, and $O mean in a shell script?
 How can you extract failed login attempts from /var/log/ auth.log using awk or grep?
+
+ANS: grep -E 'Failed password|authentication failure' /var/log/auth.log    
+
+
 How do you automatically kill a process consuming high CPU or memory?
+#!/bin/bash
+CPU_THRESHOLD=80
+MEM_THRESHOLD=90
+ps -eo pid,ppid,cmd,%cpu,%mem --sort=-%cpu | awk 'NR>1 && $4>CPU_THRESHOLD {print $1}' | xargs -r kill -9
+ps -eo pid,ppid,cmd,%cpu,%mem --sort=-%mem | awk 'NR>1 && $5>MEM_THRESHOLD {print $1}' | xargs -r kill -9
+\\/////////////////////////////////////
+
+
+
 How can you take user input dynamically inside a shell script?
+ANS:The read command pauses the script and waits for the user to type something, storing the input into one or more specified variables.
+
+#!/bin/bash
+
+# 1. Ask for the log file path dynamically
+read -r -p "Enter the full path to the log file (e.g., /var/log/auth.log): " LOG_PATH
+
+# 2. Ask for the pattern to search for dynamically
+read -r -p "Enter the search pattern (e.g., 'Failed password'): " SEARCH_PATTERN
+
+echo "Searching for '$SEARCH_PATTERN' in $LOG_PATH..."
+echo "--------------------------------------------------------"
+
+# Execute the grep command using the dynamic variables
+grep -E "$SEARCH_PATTERN" "$LOG_PATH"
+
+echo "--------------------------------------------------------"
+echo "Search complete."
 What is the difference between > and >> in file redirection?
+
+ANS : Both > and >> are used to redirect the standard output of a command
+> (Single Angle Bracket): Overwrite
+
+  ex:# This command will delete everything in 'failed_logins.txt' 
+# before adding the new output from grep.
+grep -E 'Failed password' /var/log/auth.log > failed_logins.txt
+
+
+>> (Double Angle Bracket): Append
+
+# This command will add the new output from grep to the end of 
+# 'failed_logins.txt' without deleting previous data.
+grep -E 'Failed password' /var/log/auth.log >> failed_logins.txt
+
 How can you schedule a Bash script using cron to run every 5 minutes?
+
+crontab -e 
+
+*/5 * * * * /path/to/your/script.sh
+
+
 What are sed and awk, and how do they differ in text processing?
+ANS: Awk processes and analyzes text files or streams by splitting input into records and fields,
+Sed performs stream editing by applying substitution, deletion, insertion, or other transformations to text non-interactively.
+
+
 How do you find and delete files older than 10 days in a specific directory?
+ANS: find /path/to/directory -type f -mtime +10 -delete
+
+
 How can you check which process is using the most memory in real time?
 Write a script to check if a service is running - if not, restart it.
+
+#!/bin/bash
+SERVICE=$1
+if [ -z "$SERVICE" ]; then
+  echo "Usage: $0 <service_name>"
+  exit 1
+fi
+
+STATUS=$(systemctl is-active --quiet $SERVICE)
+if [ $? -ne 0 ]; then
+  echo "$(date): $SERVICE down, restarting..." | logger -t service-check
+  systemctl restart $SERVICE
+  sleep 5
+  if [ $(systemctl is-active --quiet $SERVICE) -ne 0 ]; then
+    echo "$(date): $SERVICE restart failed!" | logger -t service-check
+  fi
+fi
+
+
+
 How do you parse JSON or CSV data in Bash?
 What's the difference between source script.sh and ./script.sh?
 How do you debug a shell script line by line?
