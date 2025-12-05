@@ -122,6 +122,16 @@ mail -s "Health Report: $HOST" admin@example.com < $REPORT
 rm $REPORT
 
 
+SOLUTION 2:
+#!/bin/bash
+HOSTNAME=$(hostname)
+DATE=$(date)
+CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
+RAM=$(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')
+DISK=$(df -h / | awk 'NR==2 {print $5}')
+
+echo -e "System Report for $HOSTNAME on $DATE\nCPU Usage: $CPU\nRAM Usage: $RAM\nDisk Usage: $DISK" | mail -s "System Health Report: $HOSTNAME" target@email.com
+
 
 
 
