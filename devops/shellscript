@@ -94,6 +94,37 @@ How do you parse JSON or CSV data in Bash?
 What's the difference between source script.sh and ./script.sh?
 How do you debug a shell script line by line?
 How can you send system health reports (CPU, RAM, Disk) via email automatically?
+#!/bin/bash
+HOST=$(hostname)
+DATE=$(date '+%Y-%m-%d %H:%M')
+REPORT="/tmp/health_$HOST.txt"
+
+# CPU (1-min load avg)
+CPU=$(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}' | sed 's/,//')
+
+# RAM (used/total %)
+RAM=$(free -m | awk 'NR==2{printf "%.1f%%", $3*100/$2}')
+
+# Disk (root usage %)
+DISK=$(df -h / | awk 'NR==2{print $5}' | sed 's/%//')
+
+cat > $REPORT << EOF
+System Health Report for $HOST ($DATE)
+CPU Load (1m): $CPU
+RAM Usage: $RAM
+Disk Usage (/): ${DISK}%
+
+$(top -bn1 | head -15)
+$(df -h | head -6)
+EOF
+
+mail -s "Health Report: $HOST" admin@example.com < $REPORT
+rm $REPORT
+
+
+
+
+
 What are traps in Bash? Give an example where you've used trap for cleanup.
 How do you manage variables across multiple shell scripts?
 How can you check if a command executed successfully in a script?
