@@ -72,6 +72,23 @@ How can you check which process is using the most memory in real time?
 Write a script to check if a service is running - if not, restart it.
 
 #!/bin/bash
+
+SERVICE="your-service-name" # Replace with your actual service name
+
+if systemctl is-active --quiet "$SERVICE"; then
+  echo "$SERVICE is running."
+else
+  echo "$SERVICE is NOT running. Attempting to restart..."
+  systemctl restart "$SERVICE"
+  # Optionally check again
+  if systemctl is-active --quiet "$SERVICE"; then
+    echo "$SERVICE successfully restarted."
+  else
+    echo "Failed to restart $SERVICE!"
+  fi
+fi
+
+#!/bin/bash
 SERVICE=$1
 if [ -z "$SERVICE" ]; then
   echo "Usage: $0 <service_name>"
