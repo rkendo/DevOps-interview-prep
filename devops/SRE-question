@@ -1,0 +1,19 @@
+👉 Question: Walk me through your current logging architecture. How are you collecting and storing logs in your Kubernetes environment?
+
+Answer: We use a sidecar pattern. The main container writes logs to a shared volume. Fluentd sidecar reads those logs and sends them to CloudWatch. From there, logs flow through Kinesis Firehose to OpenSearch for fast queries. We keep 7 days in OpenSearch, 30 days in CloudWatch, and archive everything to S3 for compliance.
+
+👉 Question: I see you're using OpenSearch. Why not just store everything in CloudWatch? Isn't that simpler?
+
+Answer: CloudWatch gets expensive and slow when you're querying petabytes of data. OpenSearch is built for high-speed queries on massive datasets. If you're a small startup, CloudWatch is fine. But at scale, you need OpenSearch for real-time analysis, and it costs less for frequent queries.
+
+👉 Question: Can you explain the difference between logs and metrics? When would you use each?
+
+Answer: Logs are events - what happened. Like user logged in from India, API returned 500 error. Metrics are measurements - how your system performs. Like CPU at 80%, latency is 250ms, uptime is 99.5%. Logs answer what happened. Metrics answer how is it performing.
+
+👉 Question: I see Prometheus and Grafana in your stack. What's the difference? Why do you need both?
+
+Answer: Prometheus collects and stores metrics temporarily, usually 10-15 days. It scrapes your application endpoints every 15-30 seconds. Grafana just visualizes data - it makes ugly numbers beautiful. Think of Prometheus as the data collector, Grafana as the presentation layer. Important point - Prometheus does NOT store long-term data.
+
+👉 Question: Your SLA promises 99.5% uptime to customers. What does that actually translate to in terms of allowed downtime?
+
+Answer: In a 30-day month, you have 2,592,000 seconds. 99.5% uptime means 0.5% downtime is acceptable. That's 12,960 seconds, or about 3.6 hours per month maximum. We monitor this in real-time, and customers can see our actual uptime on dashboards.
