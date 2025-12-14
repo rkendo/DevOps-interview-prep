@@ -1,0 +1,31 @@
+******AWS Question & Answer******
+
+1. Explain the difference between an AWS Region and an Availability Zone (AZ)
+🔸A Region is a physical location in the world with multiple Availability Zones. An AZ is an isolated data center within a region, designed to be independent of others to ensure high availability and fault tolerance.
+
+2. What is an Amazon EC2 instance and what is the difference between stopping and terminating it?
+🔸An EC2 (Elastic Compute Cloud) instance is a virtual server in the cloud. Stopping an instance performs a normal shutdown while the underlying compute resources are reserved, and data on the EBS volume persists. Terminating an instance also shuts it down, but the associated EBS volumes are usually deleted, and the instance cannot be recovered.
+
+3. What is Amazon S3, and what are its primary use cases?
+🔸Amazon S3 (Simple Storage Service) is a scalable object storage service for storing and retrieving any amount of data from anywhere on the web. Use cases include data archiving, backups, static website hosting and big data analytics.
+
+4. What is the purpose of a Virtual Private Cloud (VPC) and Network Security Groups (NSG)?
+🔸 A VPC is a logically isolated virtual network within AWS where you launch resources, giving you control over network settings. A Security Group acts as a virtual firewall for EC2 instances, controlling inbound and outbound traffic at the instance level.
+
+🔹Azure
+1. What is the purpose of Azure Blob Storage?
+🔸Microsoft's object storage solution used to store massive amounts of unstructured data, such as images, documents, and video files.
+
+2. Explain the concept of Availability Sets and Availability Zones in Azure.
+🔸An Availability Set is a logical grouping of VMs within a single data center to ensure application availability by spreading them across different physical hardware racks (fault domains and update domains). An Availability Zone is a physically separate data center within an Azure region with independent power, cooling, and networking, protecting against entire data center failures.
+
+3. What are Azure Resource Groups, and why are they important?
+🔸A Resource Group is a logical container that holds related resources for an Azure solution. It allows you to manage the lifecycle of an application's resources together (deploy, update, and delete as a single unit).
+
+4. What are the three main cloud service models, and what are examples in Azure?
+🔸The models are:
+IaaS (Infrastructure as a Service): Provides virtual machines, storage, networking, where you manage the OS and applications.
+PaaS (Platform as a Service): Provides a platform for developers to build and deploy applications without managing the underlying infrastructure (eg: Azure App Service, Azure SQL Database)
+SaaS (Software as a Service): The entire application is hosted and managed by the provider (eg:Microsoft Office 365).
+
+hashtag#AWS hashtag#Linux hashtag#DevOps hashtag#Networking
