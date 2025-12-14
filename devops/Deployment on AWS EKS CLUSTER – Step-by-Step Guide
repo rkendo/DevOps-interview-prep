@@ -1,0 +1,837 @@
+
+
+Devops Now and Future
+
+Deployment on AWS EKS CLUSTER – Step-by-Step Guide
+December 01, 2025
+ 
+
+Deployment on AWS EKS CLUSTER
+– Step-by-Step Guide
+Author: Vikramsinh Shinde
+Date: December 1, 2025
+
+
+In this tutorial, we’ll deploy a sample NGINX application on AWS EKS, push a Docker image to ECR, and expose it externally via AWS ALB Ingress.
+
+Objective: Deploy and manage a sample NGINX application on AWS EKS with scalability, ALB ingress, and Docker/ECR integration.
+
+Tools & Technologies Used:
+
+AWS: EKS, ECR, EC2, IAM
+
+Kubernetes: Deployment, Service, Ingress, HPA
+
+Helm: AWS Load Balancer Controller
+
+Docker: Build and push images
+
+CI/CD: GitHub Actions (optional, for automated manifest application)
+
+Linux CLI: kubectl, awscli, curl
+
+Terraform: Infrastructure As a Code
+
+All tasks including EKS cluster setup, Docker image build, ECR push, deployment, service, ALB ingress, and verification are complete.Screenshots of Successful Deployment
+
+
+
+
+1. Setting Up the EKS Cluster Using Terraform
+We first created an EKS cluster using Terraform:
+
+
+terraform apply
+Cluster Details:
+
+Cluster Name: vikram-eks
+
+Cluster Endpoint: https://42C02119786CCBA6FFE4712A9AF9D004.gr7.ap-south-1.eks.amazonaws.com
+
+Node Group: vikram-eks:node-group-1
+
+Configure kubectl to use the cluster:
+
+aws eks update-kubeconfig --name vikram-eks --region ap-south-1
+kubectl get nodes
+Screenshot Placeholder: Cluster nodes in Ready state.
+
+
+2. Building and Pushing Docker Image to ECR
+Directory structure for portfolio app:
+
+portfolio/
+├── Dockerfile
+├── index.html
+└── assets/
+Dockerfile:
+
+FROM nginx:alpine
+COPY ./ /usr/share/nginx/html
+Build and push to ECR:
+
+aws ecr create-repository --repository-name portfolio --region ap-south-1
+
+aws ecr get-login-password --region ap-south-1 | \
+docker login --username AWS --password-stdin <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com
+
+docker build -t portfolio .
+docker tag portfolio:latest <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/portfolio:latest
+docker push <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/portfolio:latest
+Screenshot Placeholder: Docker image pushed to AWS ECR.
+
+
+
+
+
+
+3. Deploying the Application in Kubernetes
+3.1 Deployment
+portfolio-deployment.yml:
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio
+  labels:
+    app: portfolio
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: portfolio
+  template:
+    metadata:
+      labels:
+        app: portfolio
+    spec:
+      containers:
+        - name: portfolio
+          image: <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/portfolio:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+Apply the deployment:
+
+kubectl apply -f portfolio-deployment.yml
+kubectl get pods --show-labels
+Screenshot Placeholder: Pods running.
+
+
+3.2 Service
+portfolio-service.yml:
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: portfolio-service
+spec:
+  selector:
+    app: portfolio
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+Apply the service:
+
+kubectl apply -f portfolio-service.yml
+kubectl get svc portfolio-service
+Screenshot Placeholder: LoadBalancer service with external IP/ALB URL.
+
+
+
+
+4. Installing AWS Load Balancer Controller
+Add Helm repository and install ALB Controller:
+
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update
+kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
+Create IAM Policy for ALB Controller:
+
+aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam_policy.json
+Associate IAM OIDC provider and create service account:
+
+eksctl utils associate-iam-oidc-provider --region ap-south-1 --cluster vikram-eks --approve
+eksctl create iamserviceaccount \
+  --cluster vikram-eks \
+  --namespace kube-system \
+  --name aws-load-balancer-controller \
+  --attach-policy-arn arn:aws:iam::<ACCOUNT_ID>:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve
+Install ALB Controller using Helm:
+
+helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=vikram-eks \
+  --set region=ap-south-1 \
+  --set vpcId=<VPC_ID> \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller
+
+kubectl get pods -n kube-system | grep aws-load-balancer-controller
+Screenshot Placeholder: ALB controller pods running.
+
+
+
+5. Exposing Application via Ingress
+portfolio-ingress.yml:
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portfolio-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: portfolio-service
+                port:
+                  number: 80
+Apply Ingress:
+
+kubectl apply -f portfolio-ingress.yml
+kubectl get ingress portfolio-ingress
+Visit the ALB URL:
+
+curl -I http://<ALB-URL>
+HTTP/1.1 200 OK
+Screenshot Placeholder: Application accessible via browser/curl.
+
+
+
+
+
+
+
+6. Verification
+Pods are running:
+
+kubectl get pods --show-labels
+Service endpoints:
+
+kubectl get endpoints portfolio-service
+Ingress ALB URL:
+
+kubectl get ingress portfolio-ingress
+Screenshot Placeholder: All resources healthy.
+
+
+
+
+7.Service must be ClusterIP, not LoadBalancer 
+Step 1: Create Namespace
+kubectl create namespace test-app
+kubectl get namespace
+Output:
+
+NAME        STATUS   AGE
+default     Active   133m
+kube-system Active   133m
+test-app    Active   108m
+Step 2: Create Docker Image for NGINX
+Dockerfile:
+
+FROM nginx:alpine
+COPY ./ /usr/share/nginx/html
+Build & Push to ECR:
+
+aws ecr create-repository --repository-name portfolio --region ap-south-1
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin <account_id>.dkr.ecr.ap-south-1.amazonaws.com
+docker build -t portfolio:latest .
+docker tag portfolio:latest <account_id>.dkr.ecr.ap-south-1.amazonaws.com/portfolio:latest
+docker push <account_id>.dkr.ecr.ap-south-1.amazonaws.com/portfolio:latest
+Step 3: Deploy NGINX Deployment
+portfolio-deployment.yml:
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio
+  namespace: test-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: portfolio
+  template:
+    metadata:
+      labels:
+        app: portfolio
+    spec:
+      containers:
+      - name: portfolio
+        image: <account_id>.dkr.ecr.ap-south-1.amazonaws.com/portfolio:latest
+        ports:
+        - containerPort: 80
+Apply Deployment:
+
+kubectl apply -f portfolio-deployment.yml
+kubectl get pods -n test-app
+Step 4: Expose Deployment via Service
+portfolio-service.yml:
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: portfolio-service
+  namespace: test-app
+spec:
+  type: ClusterIP
+  selector:
+    app: portfolio
+  ports:
+    - port: 80
+      targetPort: 80
+Apply Service:
+
+kubectl apply -f portfolio-service.yml
+kubectl get svc -n test-app
+Step 5: Configure Horizontal Pod Autoscaler (HPA)
+portfolio-hpa.yml:
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: portfolio-hpa
+  namespace: test-app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: portfolio
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
+Apply HPA:
+
+kubectl apply -f portfolio-hpa.yml
+kubectl get hpa -n test-app
+Step 6: Install AWS Load Balancer Controller
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update
+kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
+
+aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
+
+eksctl utils associate-iam-oidc-provider --region ap-south-1 --cluster vikram-eks --approve
+
+eksctl create iamserviceaccount \
+  --cluster vikram-eks \
+  --namespace kube-system \
+  --name aws-load-balancer-controller \
+  --attach-policy-arn arn:aws:iam::<account_id>:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve
+
+helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=vikram-eks \
+  --set region=ap-south-1 \
+  --set vpcId=<vpc-id> \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller
+
+kubectl get pods -n kube-system | grep aws-load-balancer-controller
+Step 7: Create Ingress for ALB
+portfolio-ingress.yml:
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portfolio-ingress
+  namespace: test-app
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: portfolio-service
+                port:
+                  number: 80
+Apply Ingress:
+
+kubectl apply -f portfolio-ingress.yml
+kubectl get ingress portfolio-ingress -n test-app
+Step 8: Access the Application
+ALB URL: From kubectl get ingress portfolio-ingress -n test-app
+
+curl -I http://<ALB-DNS-Name>
+Output:
+
+HTTP/1.1 200 OK
+Server: nginx/1.29.3
+Content-Type: text/html
+NodePort (Optional):
+
+kubectl expose deployment portfolio --type=NodePort --port=80 -n test-app
+kubectl get svc -n test-app
+curl http://<node-public-ip>:<nodeport>
+✅ Section Completed
+Namespace created ✅
+
+NGINX Deployment with 2 replicas ✅
+
+ClusterIP & NodePort Service ✅
+
+Horizontal Pod Autoscaler configured ✅
+
+AWS Load Balancer Controller installed ✅
+
+ALB Ingress deployed ✅
+
+Docker image pushed to ECR ✅
+
+Kubernetes manifests applied ✅
+
+
+
+       
+
+       
+
+
+
+8. GitHub-Action 
+
+
+
+        
+
+   
+
+We built the Docker image and pushed it to ECR:
+
+# Dockerfile
+FROM nginx:alpine
+COPY ./ /usr/share/nginx/html
+Deployment manifest portfolio-deployment.yml:
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio
+  namespace: test-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: portfolio
+  template:
+    metadata:
+      labels:
+        app: portfolio
+    spec:
+      containers:
+      - name: portfolio
+        image: 851725194217.dkr.ecr.ap-south-1.amazonaws.com/portfolio:latest
+        ports:
+        - containerPort: 80
+Apply the deployment:
+
+kubectl apply -f portfolio-deployment.yml
+kubectl get pods -n test-app
+✅ Result: Deployment updated with the ECR image; pods are running successfully.
+
+Step 2: Configure HPA, Service, and Ingress
+Horizontal Pod Autoscaler (HPA)
+portfolio-hpa.yml:
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: portfolio-hpa
+  namespace: test-app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: portfolio
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
+Apply HPA:
+
+kubectl apply -f portfolio-hpa.yml
+kubectl get hpa -n test-app
+Service
+portfolio-service.yml:
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: portfolio-service
+  namespace: test-app
+spec:
+  type: ClusterIP
+  selector:
+    app: portfolio
+  ports:
+    - port: 80
+      targetPort: 80
+Apply Service:
+
+kubectl apply -f portfolio-service.yml
+kubectl get svc -n test-app
+kubectl get endpoints -n test-app portfolio-service
+Ingress
+portfolio-ingress.yml:
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portfolio-ingress
+  namespace: test-app
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: portfolio-service
+                port:
+                  number: 80
+Apply Ingress:
+
+kubectl apply -f portfolio-ingress.yml
+kubectl get ingress portfolio-ingress -n test-app
+✅ Result: HPA, Service, and Ingress are configured; ALB URL is generated.
+
+Step 3: CI/CD with GitHub Actions
+
+
+
+
+
+       
+
+
+
+Push your code to GitHub:
+
+git add .
+git commit -m "Update deployment with ECR image"
+git push origin main
+GitHub Actions Workflow:
+
+name: EKS CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ap-south-1
+  ECR_REPOSITORY: portfolio
+  CLUSTER_NAME: vikram-eks
+  KUBE_NAMESPACE: test-app
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        run: |
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} \
+            | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.ECR_REPOSITORY }}:latest .
+
+      - name: Tag Docker image
+        run: |
+          docker tag ${{ env.ECR_REPOSITORY }}:latest \
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+
+      - name: Push Docker image to ECR
+        run: |
+          docker push \
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+
+      - name: Configure kubectl for EKS
+        run: |
+          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.CLUSTER_NAME }}
+
+      - name: Update Kubernetes Deployment
+        run: |
+          kubectl set image deployment/portfolio portfolio=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/portfolio:latest \
+            -n ${{ env.KUBE_NAMESPACE }}
+✅ Result: Any push to main updates the deployment automatically.
+Conclusion
+Deployment updated with ECR image ✅
+
+HPA, Service, and Ingress configured ✅
+
+CI/CD pipeline via GitHub Actions ✅
+
+
+
+
+
+
+
+
+
+
+
+                                         
+
+
+devops-task
+
+devops-practical-assignment/
+
+├── eks/
+├── namespace.yaml
+├── deployment.yaml
+├── service.yaml
+├── ingress.yaml
+├── hpa.yaml
+└── README.md │
+
+├── docker-onprem/
+├── Dockerfile │
+├── index.html │
+├── docker-compose.yml │
+├── nginx-compose.service
+├── logrotate.conf
+└── README.md
+│
+├── .github/ │
+└── workflows/
+└── deploy.yaml
+├── .gitignore
+└── README.md
+
+Task	Status
+1. Create namespace test-app	✅ Completed (kubectl get namespace)
+2. Deploy NGINX Deployment with 2 replicas & resource limits	✅ Completed (portfolio-deployment.yml)
+3. Expose Deployment with ClusterIP / NodePort service	✅ Completed (portfolio-service.yml & kubectl expose)
+4. Configure HPA with CPU target 60%	✅ Completed (portfolio-hpa.yml)
+5. Install AWS Load Balancer Controller	✅ Completed (Helm, pods running)
+6. Create Ingress for ALB	✅ Completed (portfolio-ingress.yml, ALB URL accessible)
+7. Build Docker image & push to ECR via CI/CD	✅ Completed (Dockerfile, Git push, workflow ready)
+8. Apply Kubernetes manifests automatically through pipeline	✅ Completed (GitHub Actions workflow to update deployment)
+🚀 Lessons Learned from My AWS EKS DevOps Project
+This project was a complete hands-on journey where I built and deployed a containerized application using Terraform, AWS EKS, AWS ECR, GitHub Actions, and Kubernetes. Along the way, I learned several valuable lessons—both technical and practical. Here are the key takeaways:
+
+1️⃣ Terraform State Management Is Critical
+I learned that Terraform must maintain a stable backend (local or S3).
+
+Destroying resources without checking the state file may leave orphaned items.
+
+Using terraform destroy from the same folder where resources were created ensures clean teardown.
+
+2️⃣ EKS Requires Multiple Permissions (IAM Roles)
+EKS cluster creation failed initially because IAM roles were incomplete.
+
+The cluster needs:
+
+An EKS Cluster Role
+
+A Node Group Role
+
+A CNI / LoadBalancer / Autoscaler policies
+
+Missing even one policy caused cluster creation to fail.
+
+3️⃣ kubectl Uses kubeconfig — AWS CLI
+The error connection refused at localhost:8080 happens when:
+
+kubeconfig wasn’t generated
+
+EKS cluster was deleted
+
+Or you didn’t run:
+
+aws eks update-kubeconfig
+Good reminder: kubectl must always talk to an active control plane.
+
+4️⃣ GitHub Actions Fails Without kubectl Authentication
+My CI/CD pipeline failed because kubectl couldn’t connect to EKS.
+
+Lesson:
+
+Before deployment steps, always run:
+
+aws eks update-kubeconfig --name <cluster>
+And configure AWS credentials in Actions.
+
+5️⃣ ECR Authentication is Temporary
+Pushing images requires a token and expires every 12 hours.
+
+Best practice:
+
+aws ecr get-login-password | docker login --username AWS --password-stdin <repo>
+CI/CD pipelines need this step before pushing the image.
+
+6️⃣ EKS Cluster Creation Costs Time, But Not Always Money
+Since the control plane was not fully deployed, AWS didn't bill anything.
+
+Micro EC2 instances fit into free tier usage.
+
+Short-lived resources = Zero cost.
+
+👉 Lesson: AWS free tier is very useful for learning, but always check Cost Explorer.
+
+7️⃣ Clean AWS Resource Cleanup is Mandatory
+After finishing the project, I checked for leftover resources:
+
+destroyed everything cleanly using only command-line.
+
+EC2
+
+Load Balancers
+
+ECR Repositories
+
+RDS
+
+EFS
+
+Snapshots
+
+IAM Policies
+
+CloudWatch Logs
+
+NAT Gateways
+
+Elastic IPs
+
+Everything cleaned → Prevented any hidden or surprise billing.
+
+8️⃣ Git Conflicts Happen If You Don’t Pull Before Push
+I got this error:
+
+! [rejected] main -> main (non-fast-forward)
+Fix was simple:
+
+git pull --rebase
+git push
+Lesson: Always pull before pushing to avoid conflicts.
+
+9️⃣ Subnets Must Match Availability Zones
+Node groups require correct subnet mapping.
+If the subnet IDs do not match AZs, EKS node groups fail.
+
+Lesson:
+
+Always verify VPC + subnets + AZ combination when deploying EKS.
+
+🔟 Keep Architecture Diagrams Ready
+Having a simple architecture diagram helped me track:
+
+VPC
+
+Subnets
+
+EKS
+
+Node groups
+
+GitHub Actions workflow
+
+ECR
+
+Load Balancer
+
+It makes debugging much easier.
+
+🏁 Final Thoughts
+This project helped me understand the real journey of building production-like infra:
+
+✔ Command-Line (AWS-CLI)
+✔ Infrastructure as Code
+✔ CI/CD pipeline
+✔ Kubernetes deployments
+✔ AWS cloud orchestration
+✔ Handling IAM, networking, Kubernetes objects, and cost management
+
+It was a perfect end-to-end DevOps experience where I built, deployed, tested, troubleshoot, finding root-causes and destroyed everything cleanly using only command-line.
+
+
+Thank You
+#git #kubernetes aws cluster Deployment Devops eks Linux comands
+
+Comments
+
+Popular posts from this blog
+Corporate CI/CD Pipeline
+December 28, 2024
+Image
+Corporate CI/CD Pipeline with Docker, Jenkins, and Nexus Repository In today's fast-paced software development landscape, continuous integration and continuous deployment (CI/CD) have become essential for delivering high-quality applications efficiently. Recently, I embarked on a project to implement a CI/CD pipeline for a web application using Docker, Jenkins, and Nexus Repository. This blog outlines the journey, technical steps, and lessons learned along the way. Project Overview The objective of this project was to containerize a Java-based web application, automate the build and deployment processes, and make the application portable across various environments. To achieve this, I: Created a custom Docker image based on the vikramsinhshinde/devops:test-1 image. Integrated Jenkins to automate the build, test, and deployment workflows. Used Nexus Repository to store and manage application artifacts. Deployed the Dockerized application on different environments, ensuring...
+Read more
+Devops Project by Using Docker Swarm, Git, GitHub, and Jenkins.
+January 18, 2025
+Image
+Docker Swarm, Git, GitHub, and Jenkins Project  Building and Deploying a Project Using Docker Swarm, Git, GitHub, and Jenkins ============================================================== Mastering Docker Swarm: Deploying a Scalable Project In today’s fast-paced DevOps-driven world, container orchestration plays a pivotal role in ensuring applications are deployed and managed effectively. Docker Swarm, Docker’s native clustering and orchestration tool, is one of the most robust and user-friendly solutions for managing containerized applications. In this blog, we’ll take you through a Docker Swarm project that demonstrates how to deploy a scalable application using Docker Swarm clusters. 1. What is Docker Swarm? Docker Swarm is an orchestration tool that allows you to manage a cluster of Docker hosts as a single virtual system. It simplifies container deployment, scaling, and management while ensuring high availability and load balancing for your applications. Key features of ...
+Read more
+Kubernetes Deployment Strategies -Blue/Green, Canary, Rolling Updates with Yaml code
+February 19, 2025
+Image
+  Kubernetes Deployment Strategies : A Complete Guide ================================================ ================================================ Kubernetes has revolutionized application deployment, making it easier to manage, scale, and roll out new versions. However, choosing the right deployment strategy is crucial to minimize downtime and ensure a smooth transition between application versions. In this blog, we will explore the most common Kubernetes deployment strategies: Blue-Green Deployment, Canary Deployment, and Rolling Updates . ================================================ 1. Blue-Green Deployment What is Blue-Green Deployment? Blue-Green Deployment is a strategy that involves maintaining two separate environments, Blue (current version) and Green (new version) . The idea is to deploy a new version in the Green environment while keeping the Blue environment live. How It Works? The Blue environment serves live traffic. A new version is deployed in the ...
+Read more
+ Powered by Blogger
+Theme images by enot-poloskun
+vikramsblog
+Visit profile
+Archive
+Labels
+Report Abuse
+
+Devops Now and Future
