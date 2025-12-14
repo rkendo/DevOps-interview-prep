@@ -1,0 +1,29 @@
+Question:
+A server can ping an IP address (like 8.8.8.8) but cannot ping domain names (like xyz.com).
+What are the possible causes, and how do you troubleshoot step by step?
+ 
+If the server can ping an IP but not a domain, I check DNS settings.
+I start by verifying /etc/resolv.conf, then test DNS resolution using dig or nslookup.
+If DNS fails, I check firewall rules, connectivity to the DNS server on port 53, and whether the DNS caching service needs restarting.
+This helps me quickly identify whether it’s a configuration issue, firewall problem, or DNS server issue.
+
+Question:
+Your NFS share is mounted but users are reporting slow access and intermittent timeouts.
+What are the possible reasons and how do you troubleshoot step by step?
+ 
+“If an NFS share is slow, I first verify network latency using ping and traceroute.
+Then I check the NFS server’s CPU, memory, and disk I/O because high I/O wait on the server directly impacts performance.
+On the client side, I verify mount options—especially NFS version, rsize/wsize, and sync/async settings.
+Next, I check RPC services and firewall ports to ensure nothing is blocked.
+Finally, I review logs on both server and client for timeouts or stale file handle errors.
+
+Question:
+A critical application is running slow and you suspect a memory leak.
+How would you confirm whether a memory leak is happening on a Linux server, and which commands/logs would you examine?
+ 
+To confirm a memory leak, I start by checking memory usage using top and ps to identify processes consuming excessive memory.
+Then I use sar -r to check if memory usage is continuously increasing over time.
+I check swap usage with free -h — increasing swap usually indicates a leak.
+Next, I review kernel logs with dmesg and journalctl -k to look for OOM kills or memory allocation failures.
+If necessary, I use pmap -x <PID> to measure the memory footprint of a process over time.
+If memory is continuously rising and not being released, that conf n irms a memory leak.
