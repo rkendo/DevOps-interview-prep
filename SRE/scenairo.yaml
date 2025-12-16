@@ -21,3 +21,47 @@ startupProbe
 Proper readinessProbe
 
 ####################################################################################################################
+
+
+An SRE team implemented a chaos engineering experiment to test the resilience of a critical microservices application. The experiment was designed to randomly terminate pods to ensure the system could handle unexpected failures. However, when executed, it caused a cascading failure that took down the entire production environment for over an hour, affecting thousands of users.
+
+How to Avoid:
+Implement proper safeguards for all chaos experiments.
+
+Start with non-production environments and gradually expand.
+
+Define clear abort conditions and automatic rollbacks.
+
+Ensure monitoring can detect early warning signs of cascading failures.
+
+Educate teams about chaos engineering principles and practices.
+
+############################################################################################################################
+A company implemented an SRE practice with error budgets based on Service Level Objectives (SLOs). One product team consistently pushed new features without adequate testing, resulting in multiple production incidents. After three weeks into the quarter, they depleted their entire error budget, triggering an automatic feature freeze per the established policy. This led to significant tension between the development team (who wanted to continue shipping features) and the SRE team (who were enforcing the error budget policy).
+Root Cause:
+Analyzed SLO violations and error budget consumption patterns.
+Reviewed recent deployments and their impact on reliability.
+Assessed the effectiveness of the error budget policy implementation.
+Actions:
+
+Dev team owns SLOs
+
+Dev team reviews budget weekly
+
+SRE acts as advisor, not enforcer
+
+Fix/Workaround:
+Implemented improved error budget visibility and alerting with Prometheus rules.
+error budget tracking service with real-time dashboards
+Provided training on SRE principles and error budgets for all teams
+Established a graduated response to error budget consumption (50%, 75%, 90%, 100%)
+How to Avoid:
+Implement graduated responses to error budget consumption, not just all-or-nothing.
+Ensure error budget visibility throughout the development process.
+Provide clear documentation and training on error budget policies.
+Establish escalation paths for exceptional circumstances.
+Focus on the collaborative aspect of error budgets, not just enforcement.
+
+
+
+
