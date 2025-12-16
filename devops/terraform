@@ -1,0 +1,26 @@
+🚨 Real-time Terraform challenge today! 🚨
+While running terraform apply on my environment, I hit this annoying error:
+
+Error: EntityAlreadyExists: Role "devops-role" already exists.
+
+😅 What happened:
+
+ I was re-deploying infrastructure, but AWS already had some resources created manually. 
+
+Terraform, expecting a fresh start, couldn’t create the IAM role and failed. A classic “Terraform vs Reality” moment!
+
+💡 How I solved it:
+ 1️⃣ Checked the existing resources in AWS.
+ 2️⃣ Synced Terraform state with existing resources using:
+
+terraform import aws_iam_role.devops_role devops-role
+
+3️⃣ Ran terraform plan → then terraform apply successfully ✅
+
+🔥 Lesson learned:
+
+* Terraform is powerful, but it needs to know the current state.
+* Manual changes in the cloud can create unexpected errors.
+* Always import existing resources before applying changes.
+
+💭 Takeaway: DevOps isn’t just code—it’s understanding the reality of your infrastructure. Every error teaches something!
