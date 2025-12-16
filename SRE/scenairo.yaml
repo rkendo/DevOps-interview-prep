@@ -1,0 +1,23 @@
+A web application was migrated to Kubernetes with Horizontal Pod Autoscaler (HPA) configured to scale based on CPU utilization. During traffic spikes, users experienced increased error rates and latency despite the system scaling up as configured.
+
+How to Explain This in an Interview
+
+“The system scaled correctly from Kubernetes’ perspective, but CPU-based HPA didn’t reflect real user load. Scaling lag, pod startup time, and non-CPU bottlenecks caused request queuing and failures. 
+The fix is to scale on application metrics, tune HPA behavior, and improve readiness and backpressure.”
+
+How This Should Be Fixed
+1. Use Better Scaling Metrics
+2.Improve Scale-Up Behavior
+Use CPU + custom metrics:
+
+CPU for resource safety
+
+App metrics for user experience
+3.Fix Readiness & Warm-Up
+Use:
+
+startupProbe
+
+Proper readinessProbe
+
+####################################################################################################################
