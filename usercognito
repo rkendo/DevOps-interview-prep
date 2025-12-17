@@ -1,0 +1,36 @@
+Common AWS architecture (recommended)
+Frontend (React / Mobile)
+        ↓
+API Gateway
+        ↓
+Lambda / Backend
+        ↓
+DynamoDB (user profile + email)
+        ↓
+SES (send emails)
+        ↓
+Cognito (auth & users)
+
+Where emails are stored
+| Purpose               | Service         |
+| --------------------- | --------------- |
+| Login / auth email    | Cognito         |
+| User profile email    | DynamoDB / RDS  |
+| Sent emails           | SES (logs only) |
+| Email content history | S3 (optional)   |
+Security best practices:
+Never store plain passwords
+Encrypt data at rest (default in AWS)
+Use IAM roles (not access keys)
+Enable SES DKIM + SPF
+Enable Cognito MFA if possible
+
+Simple recommendation (short answer)
+If you’re on AWS:
+
+Users → Amazon Cognito
+
+Emails (data) → DynamoDB
+
+Send emails → Amazon SES
+
