@@ -1,0 +1,61 @@
+Node drain stuck indefinitely due to unresponsive terminating pod
+
+Step-by-Step Fix:
+Identify the Stuck Pod
+kubectl get pods -A --field-selector spec.nodeName=<NODE_NAME>
+Check pod status:
+kubectl describe pod <pod-name> -n <namespace>
+Check PodDisruptionBudget (Very Common)
+kubectl get pdb -A
+kubectl describe pdb <pdb-name> -n <namespace>
+Force Delete the Pod (Most Effective)
+kubectl delete pod <pod-name> -n <namespace> \
+  --grace-period=0 --force
+Remove Blocking Finalizers:
+kubectl get pod <pod-name> -n <namespace> -o yaml
+kubectl patch pod <pod-name> -n <namespace> \
+  -p '{"metadata":{"finalizers":[]}}' --type=merge
+Fix/Workaround:
+kubectl patch pod  -p '{"metadata":{"finalizers":[]}}' --type=merge
+You are forcibly removing all finalizers from a pod so Kubernetes can finish deleting it immediately.
+
+This is typically used when a pod is stuck in Terminating state and blocking actions like:
+
+kubectl drain,Node maintenance,Cluster-upgrades
+Diagnosis Steps:
+Checked kubectl get pods --all-namespaces -o wide to find lingering pods.
+Found pod stuck in Terminating state for over 20 minutes.
+Used kubectl describe pod to identify the presence of a custom finalizer.
+
+##############################################################################################################
+
+2.Node Not Rejoining After Reboot
+
+Checked system logs and kubelet logs.
+kubectl get nodes
+Common states:
+
+NotReady
+Node missing entirely
+Node shows Ready but pods not scheduling
+
+kubectl describe node <node-name>
+KubeletNotReady
+NetworkUnavailable,Certificate errors,memory
+
+Check Kubelet Status on the Node 
+systemctl status kubelet
+Verify Container Runtime (containerd / Docker)
+systemctl status containerd
+# or
+systemctl status docker
+systemctl restart containerd
+
+Check Node Identity Mismatch
+
+If hostname changed after reboot:
+
+Node tries to register as a new name
+Old node object remains NotReady
+
+############################################################################
