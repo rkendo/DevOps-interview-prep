@@ -1,0 +1,153 @@
+AZURE DEVOPS + KUBERNETES PROJECT
+
+Project Title
+
+Zero-Downtime Multi-Region AKS Deployment with GitOps, Security & Disaster Recovery
+
+
+🎯 Business Problem
+
+● A fintech platform was experiencing:
+
+● Downtime during releases
+
+● Manual Kubernetes changes causing instability
+
+● Security risks due to shared cluster access
+
+● No disaster recovery strategy
+
+● Scaling issues during peak traffic
+
+
+Management asked for:
+
+> “A fully automated, secure, self-healing Kubernetes platform with zero downtime.”
+
+
+
+🏗️ High-Level Architecture
+
+● Azure Kubernetes Service (AKS)
+
+● Azure DevOps (YAML pipelines)
+
+● GitOps (Argo CD)
+
+● Azure Container Registry (ACR)
+
+●Azure Key Vault
+
+●Azure Front Door
+
+●Azure Monitor + Prometheus
+
+Terraform for infra
+
+
+🚀 CI/CD + GitOps Flow
+
+1. Developer pushes code
+
+
+2. Azure DevOps builds image → pushes to ACR
+
+
+3. Helm chart updated automatically
+
+
+4. Argo CD syncs state to AKS
+
+
+5. Kubernetes handles rollout & rollback
+
+
+
+➡️ No direct kubectl access allowed
+
+
+🔐 Security (Interview-Winning)
+
+●OIDC between Azure DevOps & Azure
+
+●Pod Identity / Workload Identity
+
+●Secrets pulled from Key Vault
+
+●Network Policies enforced
+
+●No secrets in pipelines or repos
+
+
+
+🔄 Zero-Downtime Deployment Strategy
+
+●Rolling updates with maxUnavailable=0
+
+●Readiness & liveness probes
+
+●Horizontal Pod Autoscaler (HPA)
+
+●Pod Disruption Budgets
+
+
+●Result: 0 downtime even during peak traffic
+
+
+⚠️ REAL FAILURE SCENARIO (VERY IMPORTANT)
+
+Incident
+
+A bad application version caused memory leak in production.
+
+What Happened
+
+Pods restarted repeatedly
+
+HPA scaled aggressively
+
+Cluster resource exhaustion risk
+
+
+●Fix Implemented
+
+Resource limits enforced
+
+Argo CD auto-rollback triggered
+
+Canary deployment introduced
+
+Alerts sent via Azure Monitor
+
+
+
+🌍 Disaster Recovery (Multi-Region)
+
+AKS clusters in two Azure regions
+
+Azure Front Door for traffic routing
+
+Database with geo-replication
+
+GitOps re-syncs cluster state in DR
+
+
+Failover time: < 5 minutes
+
+
+
+📊 Monitoring & Observability
+
+Prometheus + Grafana
+
+Azure Monitor & Log Analytics
+
+Application metrics + cluster metrics
+
+Alert rules for latency, CPU, memory
+
+
+
+🧠 HOW TO EXPLAIN IN INTERVIEW (30 Seconds)
+
+“We built a zero-downtime AKS platform using Azure DevOps and GitOps. CI handles builds, GitOps handles deployments, Kubernetes handles scaling and recovery. Security was enforced via identity-based access and policies. We also designed multi-region disaster recovery with automated failover.”
