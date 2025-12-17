@@ -1,0 +1,27 @@
+Ever wondered how Kubernetes decides where your pods run?
+
+ It’s not random. Pod placement directly impacts latency, availability, and failure tolerance.
+
+That’s why Kubernetes provides two powerful scheduling strategies 👇
+🔵 Pod Affinity — Keep Related Pods Close
+ Best when your workloads need:
+ • Low-latency communication
+ • Shared data or local caching
+ • Tightly coupled services
+🎯 Goal: Better performance & faster data access
+
+🟠 Pod Anti-Affinity — Distribute Pods for Resilience
+ Essential when your priority is:
+ • High availability across nodes
+ • Reduced blast radius during failures
+ • Stability for critical workloads
+🎯 Goal: Fault tolerance & maximum uptime
+
+🚀 Smart scheduling = smarter deployments
+ A small change in affinity rules can:
+ • Prevent outages
+ • Reduce latency
+ • Significantly improve cluster stability
+
+📌 Designing production-grade Kubernetes workloads?
+ Remember — pod placement matters more than you think.
