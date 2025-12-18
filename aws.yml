@@ -1,0 +1,83 @@
+Real-Time AWS Engineer Questions & Answers
+
+1. What is the difference between an EC2 instance stop and terminate?
+
+Stop: Shuts down the instance but retains the EBS volumes and configuration. You can restart later.
+
+Terminate: Deletes the instance and associated resources (unless EBS volumes are set to persist).
+
+2. How do you design a highly available architecture in AWS? Use Auto Scaling Groups for EC2.
+
+Deploy across multiple Availability Zones (AZs).
+
+Use Elastic Load Balancer (ELB) to distribute traffic.
+
+Store data in RDS Multi-AZ or Aurora Global Databases for redundancy.
+
+3. What steps would you take if an EC2 instance is not reachable? Check Security Groups and Network ACLs.
+
+Verify Route Tables and Internet Gateway attachment.
+
+Inspect System Logs via EC2 console.
+
+Use AWS Systems Manager Session Manager if SSH is blocked.
+
+4. How do you secure sensitive data in S3?Enable Server-Side Encryption (SSE-S3, SSE-KMS).
+
+Use Bucket Policies and IAM roles for fine-grained access.
+
+Enable S3 Block Public Access.
+
+Turn on Object Lock for immutability.
+
+5. Explain the difference between horizontal and vertical scaling in AWS. 
+
+Horizontal scaling: Adding more instances (e.g., Auto Scaling).
+
+Vertical scaling: Increasing resources (CPU/RAM) of a single instance.
+
+6. How do you monitor AWS resources in real time?
+
+CloudWatch Metrics & Alarms for performance.
+
+CloudTrail for API activity.
+
+AWS Config for compliance.
+
+X-Ray for application tracing.
+
+7. What is the difference between Security Groups and NACLs?
+
+Security Groups: Stateful, applied at instance level.
+
+NACLs: Stateless, applied at subnet level.
+
+8. How do you handle disaster recovery in AWS?
+
+Use Cross-Region Replication (CRR) for S3.
+
+RDS Read Replicas in another region.
+
+Backup & Restore strategy with AWS Backup.
+
+Pilot Light / Warm Standby / Multi-Site DR patterns depending on cost vs. recovery time.
+
+9. How do you reduce AWS costs in real-time projects?
+
+Use Reserved Instances or Savings Plans.
+
+Enable Auto Scaling to avoid idle resources.
+
+Use Spot Instances for non-critical workloads.
+
+Monitor with Cost Explorer and Budgets.
+
+10. Scenario: Your application is experiencing latency. How do you troubleshoot?
+
+Check CloudWatch metrics for CPU, memory, and network.
+
+Use VPC Flow Logs to analyze traffic.
+
+Verify Load Balancer health checks.
+
+Optimize database queries or switch to Aurora Serverless.
