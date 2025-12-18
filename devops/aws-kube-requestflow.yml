@@ -1,0 +1,36 @@
+Here’s how a real production request usually flows 👇
+1️⃣ User → DNS
+ • Route 53 resolves the domain
+ • Health checks decide which endpoint is active
+2️⃣ DNS → Load Balancer
+ • ALB terminates TLS (ACM)
+ • Path-based or host-based routing rules apply
+ • WAF filters malicious traffic
+3️⃣ ALB → Kubernetes (EKS)
+ • Ingress Controller (AWS Load Balancer Controller)
+ • Maps ALB rules → Kubernetes Services
+4️⃣ Service → Pod
+ • kube-proxy / iptables route traffic
+ • Pod receives the request
+ • HPA scales pods based on metrics
+5️⃣ Pod → AWS Services
+ • IAM Role for Service Account (IRSA)
+ • Calls S3 / DynamoDB / SQS / Lambda
+ • No hard-coded credentials
+6️⃣ Observability & Reliability
+ • CloudWatch for infra metrics
+ • Prometheus for app metrics
+ • Fluent Bit → logs
+ • Tracing via X-Ray / OpenTelemetry
+7️⃣ Failure Handling
+ • Readiness probes stop bad pods
+ • Auto Scaling replaces unhealthy nodes
+ • Multi-AZ setup avoids single-point failure
+📌 Why this matters
+ Understanding the request flow helps you:
+ ✔ Debug faster
+ ✔ Design better architectures
+ ✔ Improve security
+ ✔ Reduce latency
+💬 Question for engineers:
+Which part of this flow do you debug most often?
