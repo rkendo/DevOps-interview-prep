@@ -1,0 +1,39 @@
+1. Explain your end-to-end monitoring strategy for a production system.
+What layers do you monitor - infra, app, logs, network, business metrics?
+2. How do you detect performance degradation before users complain?
+Proactive vs reactive monitoring.
+3. Difference between white-box and black-box monitoring.
+When do you use which?
+4. How do you design alerts that don’t cause alert fatigue?
+Thresholds, dynamic alerts, anomaly detection.
+5. What SLO, SLA, and SLI did you define in your last project?
+And how did you measure them?
+6. How do you correlate logs, metrics, and traces during an incident?
+Explain observability pillars.
+7. How do you monitor Kubernetes clusters at scale?
+Node exporters, cAdvisor, Kube-State-Metrics, API server metrics.
+8. What is an “Alert Runbook”? Do you create them?
+Steps, owners, expected action.
+9. How do you monitor CI/CD pipelines themselves?
+Pipeline success rate, MTTR, deployment frequency, lead time.
+10. How do you track error budgets?
+And how do they influence deployments?
+11. How would you troubleshoot high CPU on a production node?
+Step-by-step investigative flow.
+12. How do you monitor microservices?
+Latency, percentiles (p95/p99), request volume, error rate.
+13. How do you ensure Prometheus handles high cardinality metrics?
+Labels, aggregation, retention policies.
+14. Explain distributed tracing and when it becomes critical.
+Jaeger / OpenTelemetry use case.
+15. How do you monitor queues like Kafka or SQS?
+Lag, consumer health, throughput.
+16. What dashboards do you create by default for any new service?
+17. How do you simulate failures to validate monitoring?
+Chaos engineering basics.
+18. How do you measure MTTR and MTTD?
+And how do you reduce them?
+19. What’s the difference between push-based and pull-based monitoring?
+Examples: Prometheus vs StatsD.
+20. How do you decide what NOT to monitor?
+Noise reduction strategies matter more than the tool.
