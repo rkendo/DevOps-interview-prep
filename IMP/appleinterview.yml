@@ -1,0 +1,61 @@
+ recently went through two technical interview rounds with Apple for a DevOps Engineer role.
+The quality and depth of questions really pushed me to think deeply about production systems, observability, and decision-making.
+
+Sharing the actual topics/questions that were asked — hoping this helps others preparing for similar roles.
+
+AWS & Cloud
+
+• AWS services worked on (EC2, RDS, EBS, EFS, etc.)
+• Difference between RDS and traditional databases
+• Database upgrades in AWS without downtime
+• EC2 standalone vs clustered setups
+• Enabling Prometheus metrics for EC2
+• CloudWatch use cases
+• EBS vs EFS
+• Setting up Kubernetes on EKS
+
+CI/CD & DevOps
+
+• Explain a CI/CD pipeline end-to-end
+• Helm charts and their usage
+• Handling failures and rollbacks
+• How monitoring integrates with TomEE servers
+
+Linux & Troubleshooting
+
+• Daily Linux usage in production
+• User unable to write files despite free disk space – how to troubleshoot
+• Logs, permissions, filesystem, and inode-related issues.
+
+Kubernetes & Observability
+
+• Liveness vs Readiness probes
+• ClusterIP vs NodePort vs LoadBalancer
+• How a ClusterIP service can still be accessed
+• Where Kubernetes logs are generated and stored
+• How Kubernetes knows where logs are located
+• How to fetch older logs (1 month+)
+• Types of Kubernetes Network Policies
+• Rolling updates and rollbacks
+• How to check deployment or pod versions
+• How applications are exposed outside a K8s cluster
+
+Prometheus & Monitoring
+
+• How Prometheus works with Kubernetes
+• How Prometheus knows what to scrape
+• Who exposes metrics for Prometheus
+• Configuring Prometheus in Kubernetes
+• Prometheus vs CloudWatch — when and why
+• Moving logs/metrics to ELK / Splunk
+• What metrics are shared with a monitoring team
+
+Behavioral & Leadership
+
+• Handling difficult production situations
+• Owning up to mistakes
+• Helping teammates who lack clarity
+• Managing multiple tasks simultaneously
+• Handling outages as a lead
+• Making changes that are future-proof
+• Why SSL certificates are important
