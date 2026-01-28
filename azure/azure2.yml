@@ -1,0 +1,63 @@
+1️⃣ Microsoft
+
+●Explain your end-to-end CI/CD pipeline design in Azure DevOps.
+
+●How do you manage multi-stage YAML pipelines across environments?
+
+●Difference between self-hosted and Microsoft-hosted agents? When to use each?
+
+●How do you secure secrets in Azure DevOps pipelines?
+
+●How do you handle rollback strategies in production?
+
+
+2️⃣ TCS
+
+●Explain classic pipelines vs YAML pipelines.
+
+●How do you manage multiple projects and repositories in Azure DevOps?
+
+●What is a service connection and how do you secure it?
+
+●How do you automate deployments for IIS / Azure Web Apps?
+
+●How do you reduce pipeline execution time?
+
+
+3️⃣ Infosys
+
+●How do you integrate SonarQube and security scans in Azure pipelines?
+
+●Explain artifact management in Azure DevOps.
+
+●How do you manage environment-specific variables?
+
+●What monitoring and alerting strategy do you follow post-deployment?
+
+●How do you handle failed deployments?
+
+
+4️⃣ Wipro
+
+●Azure DevOps vs Jenkins – real project comparison.
+
+●How do you manage containerized deployments using Azure DevOps?
+
+●Explain blue-green or canary deployment approach.
+
+●How do you implement RBAC in Azure DevOps?
+
+●How do you handle hotfix deployments?
+
+
+5️⃣ Capgemini
+
+●How do you design pipelines for microservices architecture?
+
+●How do you manage secrets using Azure Key Vault?
+
+●Explain pipeline triggers (CI, PR, scheduled).
+
+●How do you troubleshoot pipeline failures?
+
+●What DevOps KPIs do you track?
