@@ -1,0 +1,79 @@
+𝟔 𝐊𝐮𝐛𝐞𝐫𝐧𝐞𝐭𝐞𝐬 𝐍𝐞𝐭𝐰𝐨𝐫𝐤𝐢𝐧𝐠 𝐈𝐧𝐭𝐞𝐫𝐯𝐢𝐞𝐰 𝐐𝐮𝐞𝐬𝐭𝐢𝐨𝐧𝐬 𝐄𝐯𝐞𝐫𝐲 𝐃𝐞𝐯𝐎𝐩𝐬 𝐄𝐧𝐠𝐢𝐧𝐞𝐞𝐫 𝐒𝐡𝐨𝐮𝐥𝐝 𝐊𝐧𝐨𝐰
+
+If you’re preparing for Kubernetes or DevOps interviews, these are not advanced questions.
+
+These are 𝐛𝐚𝐬𝐞𝐥𝐢𝐧𝐞 𝐞𝐱𝐩𝐞𝐜𝐭𝐚𝐭𝐢𝐨𝐧𝐬 — and surprisingly, many candidates still get them wrong.
+Save this for revision 👇
+
+1️⃣ 𝐖𝐡𝐲 𝐝𝐨 𝐰𝐞 𝐧𝐞𝐞𝐝 𝐛𝐨𝐭𝐡 𝐂𝐥𝐮𝐬𝐭𝐞𝐫𝐈𝐏 𝐚𝐧𝐝 𝐍𝐨𝐝𝐞𝐏𝐨𝐫𝐭?
+This question tests 𝐬𝐞𝐜𝐮𝐫𝐢𝐭𝐲 𝐭𝐡𝐢𝐧𝐤𝐢𝐧𝐠, not definitions.
+
+You don’t want every service exposed to the outside world.
+▸ 𝐂𝐥𝐮𝐬𝐭𝐞𝐫𝐈𝐏 is used for internal communication
+Example: databases, internal microservices
+▸ 𝐍𝐨𝐝𝐞𝐏𝐨𝐫𝐭 / 𝐋𝐨𝐚𝐝𝐁𝐚𝐥𝐚𝐧𝐜𝐞𝐫 is used only for services that must be accessed by users
+
+Key principle here: 𝐥𝐞𝐚𝐬𝐭 𝐩𝐫𝐢𝐯𝐢𝐥𝐞𝐠𝐞
+Expose only what is absolutely necessary.
+
+2️⃣ 𝐖𝐡𝐞𝐧 𝐢𝐬 𝐍𝐨𝐝𝐞𝐏𝐨𝐫𝐭 𝐚𝐜𝐭𝐮𝐚𝐥𝐥𝐲 𝐫𝐞𝐪𝐮𝐢𝐫𝐞𝐝?
+In most cloud setups, NodePort is 𝐫𝐚𝐫𝐞𝐥𝐲 𝐮𝐬𝐞𝐝 𝐝𝐢𝐫𝐞𝐜𝐭𝐥𝐲.
+
+You usually prefer:
+▸ LoadBalancer
+▸ Ingress
+
+NodePort is mainly used when:
+▸ Running on 𝐨𝐧-𝐩𝐫𝐞𝐦 / 𝐛𝐚𝐫𝐞-𝐦𝐞𝐭𝐚𝐥(no cloud LB)
+▸ Temporary demos or testing
+▸ Setting up a 𝐜𝐮𝐬𝐭𝐨𝐦 𝐈𝐧𝐠𝐫𝐞𝐬𝐬 𝐂𝐨𝐧𝐭𝐫𝐨𝐥𝐥𝐞𝐫 that listens on NodePort
+
+Important insight:
+NodePort is more of a 𝐛𝐮𝐢𝐥𝐝𝐢𝐧𝐠 𝐛𝐥𝐨𝐜𝐤 than a final solution.
+
+3️⃣ 𝐂𝐚𝐧 𝐍𝐨𝐝𝐞𝐏𝐨𝐫𝐭 𝐛𝐞 𝐚𝐜𝐜𝐞𝐬𝐬𝐞𝐝 𝐟𝐫𝐨𝐦 𝐭𝐡𝐞 𝐢𝐧𝐭𝐞𝐫𝐧𝐞𝐭?
+Technically, yes.
+
+If:
+▸ Your Kubernetes nodes have public IPs
+▸ Firewall rules allow traffic on that port
+
+But this is 𝐛𝐚𝐝 𝐩𝐫𝐚𝐜𝐭𝐢𝐜𝐞.
+
+Node IPs can change.
+Nodes can scale down.
+Users lose access.
+
+That’s why production traffic should go through a LoadBalancer or Ingress, not directly to nodes.
+
+4️⃣ 𝐂𝐚𝐧 𝐚 𝐂𝐍𝐀𝐌𝐄 𝐩𝐨𝐢𝐧𝐭 𝐭𝐨 𝐚 𝐍𝐨𝐝𝐞𝐏𝐨𝐫𝐭?
+This is a classic interview trap.
+
+𝐂𝐍𝐀𝐌𝐄 𝐦𝐚𝐩𝐬 𝐚 𝐝𝐨𝐦𝐚𝐢𝐧 𝐭𝐨 𝐚𝐧𝐨𝐭𝐡𝐞𝐫 𝐝𝐨𝐦𝐚𝐢𝐧, not to:
+▸ An IP address
+▸ A port number
+
+So you cannot map:
+𝕒𝕡𝕚.𝕞𝕪𝕤𝕚𝕥𝕖.𝕔𝕠𝕞 → :𝟛𝟘𝟘𝟘𝟘
+
+You can map a CNAME to a node DNS name, but users will still need to type the port.
+
+To remove the port from the URL, you need:
+▸ LoadBalancer
+▸ Or Ingress listening on 80 / 443
+
+5️⃣ 𝐂𝐚𝐧 𝐰𝐞 𝐚𝐭𝐭𝐚𝐜𝐡 𝐍𝐨𝐝𝐞𝐏𝐨𝐫𝐭 𝐝𝐢𝐫𝐞𝐜𝐭𝐥𝐲 𝐭𝐨 𝐩𝐨𝐫𝐭 𝟖𝟎?
+Short answer: 𝐍𝐨.
+
+By default, NodePorts are restricted to:
+30000–32767
+
+Why?
+
+To avoid conflicts with system services running on the host.
+
+If you want port 80:
+▸ Use a 𝐋𝐨𝐚𝐝𝐁𝐚𝐥𝐚𝐧𝐜𝐞𝐫
+▸ Or route traffic via 𝐈𝐧𝐠𝐫𝐞𝐬𝐬
+
+Editing API server flags to allow port 80 is 𝐝𝐚𝐧𝐠𝐞𝐫𝐨𝐮𝐬 𝐚𝐧𝐝 𝐧𝐨𝐭 𝐫𝐞𝐜𝐨𝐦𝐦𝐞𝐧𝐝𝐞𝐝.
