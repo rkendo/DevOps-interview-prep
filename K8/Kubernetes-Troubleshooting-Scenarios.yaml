@@ -1,3 +1,6 @@
+how to connect Kubernetes pods to persistent storage.
+
+
 Node drain stuck indefinitely due to unresponsive terminating pod
 
 Step-by-Step Fix:
