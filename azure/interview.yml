@@ -1,0 +1,16 @@
+🔁 Azure DevOps Pipelines – Real-World DevOps Scenarios
+	1.	An Azure DevOps pipeline works in dev but fails in prod. How do you troubleshoot?
+	2.	A pipeline is triggered multiple times unexpectedly. How do you fix it?
+	3.	Secrets are exposed in pipeline logs. What immediate and long-term steps do you take?
+	4.	How do you implement multi-stage pipelines for dev, qa, and prod?
+	5.	A deployment job failed after partial release. How do you roll back safely?
+	6.	Pipeline execution is slow. How do you optimize it?
+	7.	How do you restrict pipeline execution for production deployments?
+	8.	An agent goes offline during a critical deployment. How do you handle it?
+	9.	How do you integrate Azure DevOps pipelines with Docker and Kubernetes?
+	10.	How do you manage environment-specific configurations securely?
+	11.	A pipeline succeeds, but the application is not updated. How do you debug?
+	12.	How do you implement approvals and gates in Azure DevOps?
+	13.	How do you version and manage pipeline YAML files?
+	14.	A service connection is misconfigured. How do you detect and fix it?
+	15.	How do you audit who deployed what and when in Azure DevOps?
