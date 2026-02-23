@@ -1,0 +1,16 @@
+🔁 GitLab CI/CD – Real-World DevOps Scenarios
+ 1. A GitLab pipeline works locally but fails in CI. How do you troubleshoot it?
+ 2. A pipeline is triggered on every commit, but you want it only on merge requests. How do you control it?
+ 3. Secrets are exposed in GitLab CI logs. What immediate and preventive actions do you take?
+ 4. A job is stuck in pending state. How do you debug runner issues?
+ 5. How do you design multi-stage pipelines for dev, qa, and prod in GitLab?
+ 6. A deployment job failed after partial deployment. How do you roll back safely?
+ 7. GitLab runner resources are exhausted. How do you scale runners?
+ 8. How do you securely manage environment-specific variables?
+ 9. A pipeline succeeds, but the application is not deployed. How do you debug?
+ 10. How do you implement manual approvals for production deployments?
+ 11. Pipeline execution time increased significantly. How do you optimize it?
+ 12. How do you integrate GitLab CI/CD with Docker and Kubernetes?
+ 13. A third-party image used in pipeline is vulnerable. How do you handle it?
+ 14. How do you restrict who can trigger production pipelines?
+ 15. How do you audit who deployed what and when in GitLab?
