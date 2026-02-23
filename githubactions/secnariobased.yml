@@ -1,0 +1,47 @@
+Scenario:
+
+ Your organization deploys applications using GitHub Actions. Recently, a production deployment was triggered accidentally from a developer’s forked repository, exposing a serious gap in pipeline security and branch protection.
+ As a DevOps engineer, your task is to harden the CI/CD pipeline and prevent unauthorized or accidental production deployments.
+
+Solution Highlights:
+
+✅ Enforce Branch Protection Rules
+Protect the main and release branches.
+Require:
+pull request reviews
+status checks
+signed commits
+
+✅ Restrict Deployment Permissions
+Use GitHub Environments with required reviewers for production.
+Only approved users can trigger prod deployments.
+
+
+environment:
+  name: production
+  url: https://app.company.com
+
+✅ Disable Workflows from Forks for Sensitive Jobs
+Prevent secrets from being exposed in fork-based workflows.
+Use:
+
+
+if: github.event.pull_request.head.repo.fork == false
+
+✅ Use OIDC Instead of Long-Lived Secrets
+Replace static cloud credentials with OIDC federation.
+Reduces risk of credential leakage in pipelines.
+
+✅ Implement Manual Approval Gates
+Require human approval before production deploy stage executes.
+Especially critical for high-risk services.
+
+✅ Audit CI/CD Activity
+Enable GitHub audit logs.
+Alert on unusual deployment triggers or permission changes.
+Outcome:
+Secure and controlled deployment pipeline.
+No accidental or unauthorized production releases.
+Improved compliance and audit visibility.
+
+💬 How do you secure your CI/CD pipelines against accidental deployments?
