@@ -1,0 +1,57 @@
+1️⃣ Designing for Failure (Chaos Happens)
+
+👉 Your system must survive node failure, AZ failure, region failure — how do you design for this across cloud + Kubernetes?
+
+⸻
+
+2️⃣ Incident Response & Ownership
+
+👉 A P1 outage is live, customers are impacted, and multiple teams are involved. What is your incident handling flow?
+
+⸻
+
+3️⃣ Scaling Without Over-Provisioning
+
+👉 How do you design systems that scale automatically without burning money or impacting reliability?
+
+⸻
+
+4️⃣ Observability Gaps During Outage
+
+👉 Metrics, logs, and traces are insufficient during an incident. What do you change long-term?
+
+⸻
+
+5️⃣ CI/CD as a Production System
+
+👉 Your CI/CD platform itself goes down. How do you design it to be reliable and recoverable?
+
+⸻
+
+6️⃣ Security vs Speed Trade-Offs
+
+👉 Security teams want strict controls, developers want fast delivery. How do you balance both?
+
+⸻
+
+7️⃣ Infrastructure Standardization at Scale
+
+👉 Different teams build infrastructure differently. How do you enforce standards without blocking innovation?
+
+⸻
+
+8️⃣ Multi-Cloud / Hybrid Strategy
+
+👉 When does multi-cloud make sense and when does it become an anti-pattern?
+
+⸻
+
+9️⃣ Cost Optimization Without Risk
+
+👉 How do you reduce cloud spend without introducing reliability or performance issues?
+
+⸻
+
+🔟 DevOps Culture & Leadership
+
+👉 How do you change team behavior, reduce manual work, and build a true DevOps culture?
