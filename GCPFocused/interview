@@ -19,3 +19,21 @@
 9️⃣ How would you debug a failing pod in GKE?
 
 🔟 What are preemptible VM instances and when should they be used?
+
+2. How do you design a cloud architecture that is both cost-efficient and highly available?
+
+3. Explain the difference between laaS, PaaS, and SaaS using examples from your own experience.
+
+4. Walk me through how you would set up disaster recovery and backup for a critical cloud application.
+
+5. Tell me about a time when a cloud deployment failed. What went wrong and how did you fix it?
+
+6. How do you monitor cloud infrastructure and ensure security and compliance?
+
+7. Can you explain auto-scaling? In which scenarios have you used it in production?
+
+8. Describe your experience with Infrastructure as Code tools like Terraform or CloudFormation.
+
+9. How would you optimize cloud costs for a company experiencing a 30% month-on-month increase in cloud spend?
+
+10. What security measures do you implement by default when provisioning cloud resources?
