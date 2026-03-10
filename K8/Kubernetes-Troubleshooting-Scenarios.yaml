@@ -62,3 +62,20 @@ Node tries to register as a new name
 Old node object remains NotReady
 
 ############################################################################
+
+1️⃣ InitContainer fails with restartPolicy: Never → Pod fails permanently.
+2️⃣ Delete pod-1 in StatefulSet → recreated with same name, others unchanged.
+3️⃣ DaemonSet → automatically tolerates master NoSchedule taints.
+4️⃣ New image during rollout → Kubernetes starts a new rollout, old one stops.
+5️⃣ Same Pod containers using same port → ❌ Not allowed (shared network namespace).
+6️⃣ HPA metrics server down → scaling freezes at current replicas.
+7️⃣ Delete ServiceAccount → mounted tokens become invalid but remain until Pod restart.
+8️⃣ Strict anti-affinity → yes, it can cause scheduling deadlocks.
+9️⃣ ReadWriteOnce → multiple Pods can mount only if on same node.
+🔟 NetworkPolicy with only ingress → egress remains open.
+1️⃣1️⃣ CrashLoopBackOff + empty logs → check kubectl describe pod & events.
+1️⃣2️⃣ Autoscaler not scaling → check node group limits & resource requests.
+1️⃣3️⃣ Downtime in rolling update → missing readiness probes or PDB.
+1️⃣4️⃣ etcd issues → watch etcd disk latency & fsync duration.
+1️⃣5️⃣ Enforce internal registry → use Admission Controller / OPA Gatekeeper.
+If even 3 of these made you pause… it’s time to go deeper into Kubernetes.
