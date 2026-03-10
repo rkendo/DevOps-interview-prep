@@ -1,0 +1,15 @@
+1. What are multiple tainted nodes in Kubernetes and when are they used?
+2. If I want to run two applications in the same EKS cluster but keep them    isolated, how would you design it?
+3. What are dedicated nodes in Kubernetes?
+4. What is a CSI Driver (Container Storage Interface)?
+5. Which Storage Classes are commonly used in Kubernetes?
+6. What would you do if Amazon EKS runs out of IP addresses? How can you resolve it?
+7. Why does AWS reserve 5 IP addresses in every subnet, and what are they used for?
+8. What is an IngressClass in Kubernetes, and which ingress controller is typically used with Amazon EKS?
+9. What is AWS Systems Manager (SSM)? How can you deploy or manage applications on EC2 using SSM?
+10. How do you integrate GitHub Actions with AWS for CI/CD pipelines?
+11. How would you deploy GPU workloads on AWS?
+12. What is MLOps, and which tools are commonly used in MLOps pipelines?
+13. Is a Webhook inbound or outbound, and how does it work in CI/CD systems?
+14. If you have 4 microservices, would you deploy them in 4 separate pods or in a single pod? Why?
+15. What are OWASP Top 10 aligned security rules?
