@@ -1,0 +1,21 @@
+☁️ GCP + DevOps Interview Questions
+
+1️⃣ What is the difference between Compute Engine, Cloud Run, and GKE?
+
+2️⃣ How does IAM work in GCP and how is it different from AWS IAM?
+
+3️⃣ What is the use of Cloud Pub/Sub in event-driven architectures?
+
+4️⃣ How do you store Terraform state securely in GCP?
+
+5️⃣ What is Workload Identity in GKE and why is it important?
+
+6️⃣ Explain Cloud Logging and Cloud Monitoring in GCP.
+
+7️⃣ How do you deploy an application using Cloud Build CI/CD pipeline?
+
+8️⃣ What is the difference between Regional and Zonal resources in GCP?
+
+9️⃣ How would you debug a failing pod in GKE?
+
+🔟 What are preemptible VM instances and when should they be used?
