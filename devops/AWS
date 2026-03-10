@@ -1,5 +1,14 @@
 ******AWS Question & Answer******
 
+2️⃣ How would you deploy an application on AWS with High Availability and High Security (without using Docker or Kubernetes)?
+This question focused on designing architecture using services like EC2, ALB, Auto Scaling, RDS, Security Groups, IAM, and Multi-AZ deployment.
+
+3️⃣ What exactly does a VPC do?
+
+4️⃣ Explain the VPC Architecture
+Topics included public/private subnets, route tables, internet gateway, NAT gateway, security groups, and NACLs.
+
+
 1. Explain the difference between an AWS Region and an Availability Zone (AZ)
 🔸A Region is a physical location in the world with multiple Availability Zones. An AZ is an isolated data center within a region, designed to be independent of others to ensure high availability and fault tolerance.
 
