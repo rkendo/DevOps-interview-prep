@@ -1,0 +1,21 @@
+🚀 AWS EKS Architecture & Traffic Flow Explained
+Understanding how traffic flows in a production Kubernetes architecture on AWS is essential for any DevOps or Cloud Engineer.
+Here’s the simplified end-to-end request flow:
+User → Route 53 → ALB → Target Groups → Node Group → Pods → RDS
+🔹 Route 53 resolves the domain and directs traffic to the Application Load Balancer.
+ 🔹 Application Load Balancer (ALB) in the public subnet handles HTTP/HTTPS requests and forwards them to target groups.
+ 🔹 EKS Node Group runs inside the private subnet to keep workloads secure.
+ 🔹 NGINX Ingress Controller manages incoming traffic inside the Kubernetes cluster.
+ 🔹 ClusterIP Services route traffic internally to application pods.
+ 🔹 Pods run the containerized application.
+ 🔹 Amazon RDS in a dedicated database subnet stores the application data securely.
+🔐 Security Layers Used
+ • Security Groups
+ • Network ACLs
+ • Private Subnets
+ • Isolated Database Subnet
+⚡ Key Architecture Design
+✔️ ALB in Public Subnet
+ ✔️ Kubernetes Nodes in Private Subnet
+ ✔️ Database in Dedicated DB Subnet
+ ✔️ Secure and Scalable Cloud Architecture
