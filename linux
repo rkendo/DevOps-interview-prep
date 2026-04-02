@@ -1,0 +1,98 @@
+Linux Interview Questions (5 Years DevOps Experience)
+1. What happens when you run a Linux command?
+When a command is executed, the shell checks the command in the PATH variable, locates the binary in directories like /bin or /usr/bin, creates a process using fork(), and executes it using exec().
+2. What is the difference between hard link and soft link?
+Hard LinkSoft LinkPoints to same inodePoints to file pathCannot cross filesystemCan cross filesystemWorks even if original file deletedBreaks if original file deleted
+Commands:
+ln file1 hardlink
+ln -s file1 softlink
+
+3. How do you check disk usage in Linux?
+df -h
+du -sh *
+
+Example troubleshooting when disk is 90% full:
+du -ah / | sort -rh | head -10
+
+4. How do you find top memory consuming processes?
+top
+htop
+ps -aux --sort=-%mem | head
+
+5. What is inode in Linux?
+An inode is a data structure that stores file metadata such as file size, owner, permissions, and timestamps.
+Check inode usage:
+df -i
+
+6. How do you check running services in Linux?
+systemctl status service-name
+systemctl list-units --type=service
+
+Example:
+systemctl status nginx
+
+7. What is the difference between cron and at?
+CronAtUsed for recurring jobsUsed for one-time jobsScheduled in crontabScheduled using at command
+Example cron job:
+crontab -e
+0 2 * * * /backup.sh
+
+8. How do you check CPU usage in Linux?
+top
+mpstat
+uptime
+vmstat
+
+9. How do you troubleshoot server not reachable issue?
+Steps:
+Check server status
+Ping server
+Check network interface
+ip addr
+ping server-ip
+netstat -tulnp
+
+Check firewall
+iptables -L
+
+10. What are file permissions in Linux?
+Permissions:
+r = read
+w = write
+x = execute
+
+Example:
+chmod 755 file.sh
+
+Meaning:
+Owner : rwx
+Group : r-x
+Others : r-x
+
+11. How do you find large files in Linux?
+find / -type f -size +1G
+
+12. What is the difference between grep, egrep and fgrep?
+CommandPurposegrepnormal searchegrepextended regexfgrepfixed string search
+13. What is load average in Linux?
+Load average shows the number of processes waiting for CPU.
+Example:
+uptime
+
+Output:
+load average: 0.30, 0.50, 0.70
+
+Values represent 1, 5, and 15 minutes.
+14. How do you check open ports in Linux?
+netstat -tulnp
+ss -tulnp
+
+15. How do you check log files in Linux?
+Common logs:
+/var/log/messages
+/var/log/syslog
+/var/log/secure
+/var/log/dmesg
+
+Example:
+tail -f /var/log/messages
