@@ -1,0 +1,23 @@
+Kubernetes
+What is a Kubernetes namespace?
+Say. I want to deploy my images in a cluster, what are the steps/stages you have to do?
+One of your worker nodes went down. What are your next steps?
+How to connect a pod to another pod in a different namespace?
+What is Persistent volume and claims
+How to handle role based access in Kubernetes?
+What is helm ?
+Difference between labels & Selectors
+End to End traffic flow in Kubernetes cluster (From your website to pods. here I mentioned TLS so got a follow up )
+
+
+🔹 Terraform
+
+What is a state file? How does locking work? (Do you know now we don't need DynamoDB lock?)
+
+How do you manage state files if there are 20 different projects and each project has 4 different environments? Don't you think there should be a better way to manage the state files?
+
+Dynamic block in Terraform.
+
+What is map() function in Terraform? Why do we use it?
+
+Do you use Terraform Open Source or Enterprise? I want to limit my deployments to 5 regions only. How to achieve this? (Sentinel)
