@@ -21,3 +21,35 @@ Dynamic block in Terraform.
 What is map() function in Terraform? Why do we use it?
 
 Do you use Terraform Open Source or Enterprise? I want to limit my deployments to 5 regions only. How to achieve this? (Sentinel)
+
+
+☁️Cloud Support Technical Question:
+
+Q. How can ensure security for the Data in Transit stored inside an EC2 instance?
+
+Q. Please elaborate about any P1 scenario which you faced on AWS EKS?
+
+Q. What are the different metrics which we should monitor as default for any EKS workload?
+
+Q. Beyond common strategies such as using Reserved Instances or Savings Plans and scheduling EC2 instances to start and stop during non‑business hours, 
+what additional cost‑optimization initiatives would you consider to further optimize the cost of your cloud environment?
+
+
+🧑🏻‍🔧Real scenario questions:
+
+Q. You have three applications under the same security group and if you are whitelisting an ip for one application then the changes are getting implemented on all 3 applications.
+How we can deal with such a situation with the minimal changes possible.
+
+Q. What is the recent performance and process optimization scenario, you worked on.
+
+Q. Any recent incident you fixed which caused downtime.
+
+Q. An application has been deployed on Amazon EKS and is fronted by a Load Balancer. 
+During periods of high traffic, performance degradation is observed. How would you troubleshoot and identify the root cause of this issue?
+
+Q. As a Support Engineer, how do you stay on top of issues that impact the overall connectivity of your application, 
+and what measures do you take to prevent such incidents from occurring in the future?
+
+Q. A 3‑tier application is hosted on AWS with standard WAF and Load Balancer configurations. 
+The application has been operating smoothly for the past six months, with no deployments, upgrades, or configuration changes during that period. However, users have recently begun reporting performance slowness in the application. 
+What could be the possible causes of this issue, and how would you approach troubleshooting it?
